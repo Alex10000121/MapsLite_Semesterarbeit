@@ -1,14 +1,12 @@
 {
-  "name": "semesterarbeit_2",
+  "name": "litemaps_zodb",
+  "private": true,
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.53.1",
-    "@types/node": "^24.0.7"
+    "@playwright/test": "^1.53.1"
+  },
+  "scripts": {
+    "test:e2e": "playwright test",
+    "serve": "npx http-server -p 5500 ."
   }
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LiteMaps Routenplaner</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<header>
+    <h1>LiteMaps Routenplaner</h1>
+</header>
+
+<main>
+    <section class="controls">
+        <form id="route-form" autocomplete="off">
+            <div class="field">
+                <label for="start">Von</label>
+                <input type="text" id="start" name="start" placeholder="Start" required />
+                <ul id="start-suggestions" class="suggestions"></ul>
+            </div>
+
+            <div class="field">
+                <label for="ziel">Nach</label>
+                <input type="text" id="ziel" name="ziel" placeholder="Ziel" required />
+                <ul id="ziel-suggestions" class="suggestions"></ul>
+            </div>
+
+            <button type="submit" id="btn">Route</button>
+        </form>
+
+        <section class="top-searches">
+            <h2>Top 10 Suchanfragen</h2>
+            <ol id="top-list"></ol>
+        </section>
+
+        <section class="saved-routes">
+            <h2>Gespeicherte Routen</h2>
+            <ul id="saved-list"></ul>
+        </section>
+    </section>
+
+    <section class="map-wrapper">
+        <div id="map"></div>
+    </section>
+</main>
+
+<footer>
+    <small>LiteMaps Beispielanwendung</small>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

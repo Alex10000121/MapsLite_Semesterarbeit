@@ -1,0 +1,8 @@
+fastapi==0.115.0
+uvicorn==0.30.6
+zodb==5.8.1
+BTrees==5.2
+persistent==5.2
+pydantic==2.8.2
+python-dotenv==1.0.1
+requests==2.32.3
