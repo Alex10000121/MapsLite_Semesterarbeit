@@ -1,47 +1,59 @@
-# LiteMaps mit ZODB
+# LiteMaps ZODB – Routenplaner (SPA + FastAPI + ZODB)
 
-Ziel: SPA Frontend mit OpenRouteService sowie FastAPI Backend mit ZODB zum Speichern persönlicher Routen.
+Eine einfache Web‑App, die zwei Orte entgegen nimmt, die Route via **OpenRouteService (ORS)** berechnet, auf einer Karte anzeigt, häufige Suchanfragen lokal speichert und **persönliche Routen** serverseitig über eine **REST‑API** mit **ZODB** persistiert.  
+Frontend als Single Page App (VanillaJS + Leaflet), Backend als FastAPI‑Service, Tests für Backend (pytest) und E2E (Playwright).
 
-## Schnellstart
+---
 
-1. Backend
-   - Python 3.11 empfohlen
-   - `cd backend`
-   - `python -m venv .venv && . .venv/bin/activate` auf macOS Linux. Unter Windows `.\.venv\Scripts\activate`
-   - `pip install -r requirements.txt`
-   - `uvicorn app.main:app --reload --port 8000`
+## Inhalt
+- [Voraussetzungen](#voraussetzungen)
+- [Installation](#installation)
+- [Konfiguration (ORS API Key)](#konfiguration-ors-api-key)
+- [Starten](#starten)
+- [Bedienung](#bedienung)
+- [REST-API (Swagger)](#rest-api-swagger)
+- [Tests](#tests)
+    - [Backend (pytest)](#backend-pytest)
+    - [Frontend (Playwright)](#frontend-playwright)
+- [Sicherheit (SQL Injection u.ä.)](#sicherheit-sql-injection-ua)
+- [Architektur](#architektur)
+- [Troubleshooting](#troubleshooting)
 
-2. Frontend
-   - Node 18 plus
-   - `cd ..`
-   - `npm install`
-   - `npm run serve`
-   - Öffne http://localhost:5500/public/index.html
-   - Trage deinen OpenRouteService Key in `public/app.js` bei `ORS_API_KEY` ein
+---
 
-3. Tests
-   - API Unit Tests: im Ordner `backend` `pytest -q`
-   - E2E Tests: im Projektroot `npx playwright install` dann `npm run test:e2e`
+## Voraussetzungen
+- **macOS / Linux / Windows**
+- **Python 3.13** (Homebrew: `brew install python`)
+- **Node.js + npm**
+- Internetzugang (für ORS)
 
-## REST API
+---
 
-- Swagger UI: http://localhost:8000/docs
-- Endpunkte:
-  - `GET /health`
-  - `GET /api/routes`
-  - `POST /api/routes`
-  - `GET /api/routes/{id}`
-  - `DELETE /api/routes/{id}`
+## Installation
 
-## Sicherheit
+### Backend
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
 
-- Keine SQL Engine vorhanden, daher ist klassische SQL Injection nicht anwendbar.
-- Eingaben werden validiert, CORS ist aktiviert.
-- API Key darf nicht im Repository landen. Nutze `.env` oder Umgebungsvariablen.
+# Abhängigkeiten inkl. httpx (für Tests):
+python -m pip install -r requirements.txt
 
-## Bewertungskriterien Abdeckung
+# Optional (empfohlen): Dev-Tools inkl. pytest
+python -m pip install -r requirements-dev.txt
+```
 
-- Frontend: Routenberechnung und Anzeige, Autocomplete, Top 10 lokale Suchanfragen.
-- REST API: ZODB als Datenbank, CRUD, Swagger durch FastAPI, Richardson Level 2.
-- Tests: Pytest Unit Tests, Playwright Akzeptanztest.
-- Deployment: nutze CI deiner Wahl für automatische Tests und Deployment.
+## Starten
+
+# Backend
+
+cd backend
+source .venv/bin/activate
+python -m uvicorn app.main:app --reload --port 8000
+
+# Frontend
+
+cd frontend
+npm run serve
