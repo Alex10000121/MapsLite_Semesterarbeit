@@ -1,59 +1,38 @@
-# LiteMaps ZODB – Routenplaner (SPA + FastAPI + ZODB)
+# MapsLite – Web-Applikation (FastAPI + ZODB + Leaflet + OpenRouteService)
 
-Eine einfache Web‑App, die zwei Orte entgegen nimmt, die Route via **OpenRouteService (ORS)** berechnet, auf einer Karte anzeigt, häufige Suchanfragen lokal speichert und **persönliche Routen** serverseitig über eine **REST‑API** mit **ZODB** persistiert.  
-Frontend als Single Page App (VanillaJS + Leaflet), Backend als FastAPI‑Service, Tests für Backend (pytest) und E2E (Playwright).
+Diese Anwendung berechnet Routen zwischen zwei Adressen (OpenRouteService), zeigt sie auf einer Karte (Leaflet) und speichert persönliche Routen serverseitig in **ZODB** (objektorientierte Datenbank, keine SQL). Häufige Suchanfragen werden **lokal im Browser** gezählt und angezeigt.
 
----
+## Features
 
-## Inhalt
-- [Voraussetzungen](#voraussetzungen)
-- [Installation](#installation)
-- [Konfiguration (ORS API Key)](#konfiguration-ors-api-key)
-- [Starten](#starten)
-- [Bedienung](#bedienung)
-- [REST-API (Swagger)](#rest-api-swagger)
-- [Tests](#tests)
-    - [Backend (pytest)](#backend-pytest)
-    - [Frontend (Playwright)](#frontend-playwright)
-- [Sicherheit (SQL Injection u.ä.)](#sicherheit-sql-injection-ua)
-- [Architektur](#architektur)
-- [Troubleshooting](#troubleshooting)
+- Single Page Application (Vanilla JS, Leaflet)
+- Autocomplete & Geocoding (ORS)
+- Routing (ORS v2 `/v2/directions/driving-car`) – **ohne** `geometry_format` (ORS liefert encoded polyline)
+- Polyline-Decode im Frontend
+- Top 10 Suchanfragen (localStorage)
+- REST API (FastAPI RML2): `GET/POST /api/routes`, `GET/DELETE /api/routes/{route_identifier}`
+- ZODB als Datenbank (keine SQL → resistent gegen SQL-Injection)
+- Akzeptanztest (Playwright)
+- Unit-Tests (pytest)
+- CORS konfigurierbar
 
 ---
 
 ## Voraussetzungen
-- **macOS / Linux / Windows**
-- **Python 3.13** (Homebrew: `brew install python`)
-- **Node.js + npm**
-- Internetzugang (für ORS)
+
+- Node.js 18+
+- Python 3.11+ (getestet mit 3.13)
+- (Windows) ggf. **Visual Studio Build Tools** mit „Desktop development with C++“, falls ZODB-Abhängigkeiten C-Extensions bauen müssen.
 
 ---
 
-## Installation
+## Einrichtung
 
-### Backend
+### 1) Backend
+
 ```bash
 cd backend
 python3 -m venv .venv
-source .venv/bin/activate            # Windows: .venv\Scripts\activate
-python -m pip install --upgrade pip
-
-# Abhängigkeiten inkl. httpx (für Tests):
-python -m pip install -r requirements.txt
-
-# Optional (empfohlen): Dev-Tools inkl. pytest
-python -m pip install -r requirements-dev.txt
-```
-
-## Starten
-
-# Backend
-
-cd backend
 source .venv/bin/activate
-python -m uvicorn app.main:app --reload --port 8000
-
-# Frontend
-
-cd frontend
-npm run serve
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+cp .env.example .env   # wenn noch nicht vorhanden

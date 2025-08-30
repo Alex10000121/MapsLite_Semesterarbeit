@@ -1,56 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>LiteMaps Routenplaner</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8" />
+  <title>MapsLite – persönliche Routen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-<header>
-    <h1>LiteMaps Routenplaner</h1>
-</header>
+  <header>
+    <h1>MapsLite</h1>
+    <p>Berechne eine Route und speichere sie in deiner persönlichen Sammlung.</p>
+  </header>
 
-<main>
-    <section class="controls">
-        <form id="route-form" autocomplete="off">
-            <div class="field">
-                <label for="start">Von</label>
-                <input type="text" id="start" name="start" placeholder="Start" required />
-                <ul id="start-suggestions" class="suggestions"></ul>
-            </div>
+  <main class="layout">
+    <section class="panel">
+      <form id="route-form" autocomplete="off">
+        <label for="start">Von</label>
+        <input id="start" type="text" placeholder="Start-Adresse" aria-label="Von" />
+        <ul id="start-suggestions" class="suggestions" role="listbox"></ul>
 
-            <div class="field">
-                <label for="ziel">Nach</label>
-                <input type="text" id="ziel" name="ziel" placeholder="Ziel" required />
-                <ul id="ziel-suggestions" class="suggestions"></ul>
-            </div>
+        <label for="ziel">Nach</label>
+        <input id="ziel" type="text" placeholder="Ziel-Adresse" aria-label="Nach" />
+        <ul id="ziel-suggestions" class="suggestions" role="listbox"></ul>
 
-            <button type="submit" id="btn">Route</button>
-        </form>
+        <button type="submit" class="primary">Suche</button>
+      </form>
 
-        <section class="top-searches">
-            <h2>Top 10 Suchanfragen</h2>
-            <ol id="top-list"></ol>
-        </section>
+      <section>
+        <h2>Top 10 Suchanfragen</h2>
+        <ol id="top-list"></ol>
+      </section>
 
-        <section class="saved-routes">
-            <h2>Gespeicherte Routen</h2>
-            <ul id="saved-list"></ul>
-        </section>
+      <section>
+        <h2>Gespeicherte Routen</h2>
+        <ul id="saved-list" class="saved"></ul>
+      </section>
     </section>
 
-    <section class="map-wrapper">
-        <div id="map"></div>
+    <section class="map-panel">
+      <div id="map" aria-label="Karte"></div>
     </section>
-</main>
+  </main>
 
-<footer>
-    <small>LiteMaps Beispielanwendung</small>
-</footer>
+  <footer>
+    <small>
+      Quellkarten: © OpenStreetMap Mitwirkende – Routing: openrouteservice.org
+    </small>
+  </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="./app.js"></script>
+  <!-- Laufzeitkonfiguration (API Key) -->
+  <script src="./config.js"></script>
+
+  <!-- Leaflet -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script src="./app.js"></script>
 </body>
 </html>

@@ -1,23 +1,26 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import List, Optional
-from datetime import datetime
+from __future__ import annotations
+from pydantic import BaseModel
+from typing import Optional, List
 
-class Coord(BaseModel):
-    lon: float
-    lat: float
+class RouteCreateRequest(BaseModel):
+    start_text: str
+    end_text: str
+    start_coordinates: dict
+    end_coordinates: dict
+    distance_meters: float
+    duration_seconds: float
+    geometry: Optional[dict] = None
 
-class RouteIn(BaseModel):
-    start_text: str = Field(min_length=1, max_length=256)
-    end_text: str = Field(min_length=1, max_length=256)
-    start_coords: Coord
-    end_coords: Coord
-    distance: float = Field(ge=0)
-    duration: float = Field(ge=0)
-    geometry: dict
+class RouteResponse(BaseModel):
+    route_identifier: str
+    start_text: str
+    end_text: str
+    start_coordinates: dict
+    end_coordinates: dict
+    distance_meters: float
+    duration_seconds: float
+    geometry: Optional[dict] = None
+    created_at_iso: Optional[str] = None
 
-class RouteOut(RouteIn):
-    id: str
-    created_at: datetime
-
-class Message(BaseModel):
-    message: str
+class RouteListResponse(BaseModel):
+    items: List[RouteResponse]

@@ -1,13 +1,10 @@
-// @ts-check
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
   use: {
-    baseURL: 'http://localhost:5500',
+    baseURL: 'http://127.0.0.1:5500',
     trace: 'on-first-retry',
   },
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-  ],
+  timeout: 30_000,
 });
