@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 const FRONTEND = 'http://127.0.0.1:5500/public/index.html';
 const BACKEND = 'http://127.0.0.1:8000';
 
-test.describe('Akzeptanztest – LiteMaps', () => {
+test.describe('Akzeptanztest – MapsLite', () => {
   test.setTimeout(90_000);
 
   test('UI lädt, Route wird berechnet, gespeichert, erneut angezeigt, persistiert und löschbar', async ({ page, request }) => {
@@ -17,7 +17,7 @@ test.describe('Akzeptanztest – LiteMaps', () => {
     await page.goto(FRONTEND, { waitUntil: 'domcontentloaded', timeout: 30_000 });
 
     // Grund-UI sichtbar
-    await expect(page.getByRole('heading', { name: /^litemaps$/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /^mapslite$/i })).toBeVisible();
     const von = page.getByLabel('Von');
     const nach = page.getByLabel('Nach');
     await expect(von).toBeVisible();
@@ -58,8 +58,12 @@ test.describe('Akzeptanztest – LiteMaps', () => {
     await expect(savedListAfterReload).toContainText('Zürich HB, Schweiz');
     await expect(savedListAfterReload).toContainText('Bern Bahnhof, Schweiz');
 
-    // Löschen: ersten passenden Eintrag löschen und das Verschwinden prüfen
-    const loeschenBtn = savedListAfterReload.getByRole('button', { name: /löschen/i }).first();
+    // Löschen: Eintrag anhand des Textes finden und dessen Lösch-Button betätigen
+    const target = savedListAfterReload
+      .locator('li', { hasText: `${startText} → ${zielText}` })
+      .first();
+    await expect(target).toHaveCount(1);
+    const loeschenBtn = target.getByRole('button', { name: /löschen/i });
     const waitDelete = page.waitForResponse(
       r => /\/api\/routes\/\d+$/.test(r.url()) && r.request().method() === 'DELETE',
       { timeout: 30_000 }

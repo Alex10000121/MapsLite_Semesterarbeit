@@ -115,22 +115,37 @@ app.add_middleware(
 # ==========================================================
 @app.get("/health")
 def health() -> Dict[str, Any]:
+    now_utc: Optional[str] = None
+    database_open: Optional[bool] = None
     problems: List[str] = []
+
+    # Zeitpunkt ermitteln
+    try:
+        now_utc = datetime.utcnow().isoformat() + "Z"
+    except Exception:
+        pass
 
     # Prüfen: Datenbank erreichbar?
     try:
         _ = get_routes_store()
+        database_open = True
     except Exception as ex:
+        database_open = False
         problems.append(f"database not ready: {ex}")
 
     # Prüfen: ORS-Key konfiguriert?
     if not ORS_API_KEY:
         problems.append("ORS_API_KEY missing")
 
+    response: Dict[str, Any] = {"status": "ok" if not problems else "unhealthy"}
     if problems:
-        return {"status": "unhealthy", "problems": problems}
+        response["problems"] = problems
+    if database_open is not None:
+        response["database_open"] = database_open
+    if now_utc is not None:
+        response["now_utc"] = now_utc
 
-    return {"status": "ok"}
+    return response
 
 
 # ==========================================================
@@ -211,7 +226,7 @@ def list_routes():
         connection.close()
 
 
-@app.post("/api/routes", response_model=RouteOut)
+@app.post("/api/routes", response_model=RouteOut, status_code=201)
 def create_route(route_in: RouteIn):
     connection, root = get_root_connection()
     try:
