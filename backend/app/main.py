@@ -1,6 +1,7 @@
 import os
 import transaction
 from typing import Any, Dict, List, Optional
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,11 +17,17 @@ from BTrees.OOBTree import OOBTree
 # ==========================================================
 # Konfiguration
 # ==========================================================
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
-DATABASE_FILE = os.getenv("DATABASE_FILE", "./data/appdata.fs")
+DATABASE_FILE = os.getenv("DATABASE_FILE", str(BASE_DIR / "data" / "appdata.fs"))
 ORS_API_KEY = os.getenv("ORS_API_KEY")
-CORS_ALLOW_ORIGINS = os.getenv("CORS_ALLOW_ORIGINS", "http://127.0.0.1:5500,http://localhost:5500").split(",")
+CORS_ALLOW_ORIGINS = os.getenv(
+    "CORS_ALLOW_ORIGINS", "http://127.0.0.1:5500,http://localhost:5500"
+).split(",")
+
+if not ORS_API_KEY:
+    raise RuntimeError("ORS_API_KEY not configured. Set it in backend/.env")
 
 # ==========================================================
 # Datenbank-Hilfen

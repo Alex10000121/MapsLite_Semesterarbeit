@@ -177,7 +177,8 @@ def test_ors_directions_proxy(tmp_path, monkeypatch):
     try:
         def fake_post(url, json=None, timeout=None, **kwargs):
             assert "/v2/directions/" in url
-            assert json and "start" in json and "end" in json
+            assert json and "coordinates" in json
+            assert "start" not in json and "end" not in json
             return _MockResp(
                 200,
                 {
